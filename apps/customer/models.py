@@ -29,6 +29,9 @@ class CustomerProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'customer_profile'
+
     def __str__(self):
         return f"{self.user.email}'s Profile"
 
@@ -42,4 +45,8 @@ class CustomerProfile(models.Model):
 @receiver(post_save, sender=User)
 def create_customer_profile(sender, instance, created, **kwargs):
     if created and instance.user_type == 'customer':
-        CustomerProfile.objects.create(user=instance)
+         CustomerProfile.objects.create(
+            user=instance,
+            first_name=instance.first_name if hasattr(instance, 'first_name') else '',
+            last_name=instance.last_name if hasattr(instance, 'last_name') else ''
+        )
