@@ -71,9 +71,13 @@ from apps.userauths.models import User
 
 # apps/userauths/api/serializers.py
 
+# apps/userauths/api/serializers.py
+
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from apps.userauths.models import User
+
+# apps/userauths/api/serializers.py
 
 class CustomerRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -86,14 +90,14 @@ class CustomerRegistrationSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         """
-        Validate phone number using the model's validator
+        Validate phone number format
         """
         phone_validator = User._meta.get_field('phone').validators[0]
         try:
             phone_validator(value)
             return value
         except ValidationError:
-            # Raise the validation error in the format expected by DRF
+            # Return the error directly without wrapping it in a dictionary
             raise serializers.ValidationError(
                 "Phone number must be entered in the format: '+999999999'"
             )

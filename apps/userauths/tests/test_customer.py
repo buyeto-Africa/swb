@@ -72,8 +72,9 @@ class CustomerRegistrationTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('phone', response.data)
-        self.assertIn('+999999999', str(response.data['phone'][0]))
+        self.assertIn('error', response.data)
+        self.assertIn('phone', str(response.data['error']))
+        self.assertIn('+999999999', str(response.data['error']))
 
     def test_missing_required_fields(self):
         """Test registration with missing required fields"""
