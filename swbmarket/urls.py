@@ -35,6 +35,8 @@ urlpatterns = [
     path('api/v1/customers/', include('apps.customer.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('api/v1/store/', include('apps.store.urls')),
     
 ]
 

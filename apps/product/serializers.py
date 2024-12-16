@@ -1,5 +1,6 @@
 # apps/products/serializers.py
-
+from rest_framework import serializers
+from apps.product.models import Product 
 from apps.core.mixins import PriceConversionMixin
 
 class ProductSerializer(PriceConversionMixin, serializers.ModelSerializer):
