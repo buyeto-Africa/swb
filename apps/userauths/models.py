@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.utils import timezone
 import uuid
+from datetime import timedelta
+from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -133,3 +135,89 @@ class Invitation(models.Model):
     class Meta:
         verbose_name = 'Invitation'
         verbose_name_plural = 'Invitations'
+
+
+# apps/userauths/models.py
+
+# apps/userauths/models.py
+
+from django.db import models
+from django.utils import timezone
+import uuid
+
+# ... existing User model code ...
+
+# apps/userauths/models.py
+
+from django.db import models
+from django.utils import timezone
+from django.core.cache import cache
+import uuid
+
+# apps/userauths/models.py
+
+from django.db import models
+from django.utils import timezone
+from django.core.cache import cache
+import uuid
+
+# apps/userauths/models.py
+
+from django.db import models
+from django.utils import timezone
+from django.core.cache import cache
+import uuid
+
+# class PasswordReset(models.Model):
+#     user = models.ForeignKey('User', on_delete=models.CASCADE)
+#     token = models.UUIDField(default=uuid.uuid4, unique=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     used_at = models.DateTimeField(null=True, blank=True)
+#     expires_at = models.DateTimeField()
+
+
+
+
+#     def save(self, *args, **kwargs):
+#         if not self.expires_at:
+#             # Set default expiration to 24 hours from creation
+#             self.expires_at = timezone.now() + timedelta(hours=24)
+#         super().save(*args, **kwargs)
+
+
+#     @classmethod
+#     def check_rate_limit(cls, email):
+#         """Check if user has exceeded rate limit"""
+#         cache_key = f"password_reset_count_{email}"
+#         count = cache.get(cache_key, 0)
+#         return count >= 3  # Limit to 3 requests per hour
+
+#     @classmethod
+#     def increment_request_count(cls, email):
+#         """Increment request count for rate limiting"""
+#         cache_key = f"password_reset_count_{email}"
+#         count = cache.get(cache_key, 0)
+#         cache.set(cache_key, count + 1, 3600)  # 1 hour expiry
+
+
+# apps/userauths/models.py
+
+class PasswordReset(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    token = models.UUIDField(default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            # Set expiration to 24 hours from creation by default
+            self.expires_at = timezone.now() + timedelta(hours=24)
+        super().save(*args, **kwargs)
+
+    def is_expired(self):
+        return timezone.now() > self.expires_at or self.used_at is not None
+
+    class Meta:
+        verbose_name = 'Password Reset'
+        verbose_name_plural = 'Password Resets'

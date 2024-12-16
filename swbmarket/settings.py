@@ -51,6 +51,10 @@ INSTALLED_APPS = [
     'apps.vendor',
     'apps.customer',
     'apps.staff',
+    'apps.core',
+    'apps.order',
+    'apps.product',
+
 
     
 ]
@@ -63,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.core.middleware.currency.CurrencyMiddleware',
+    'apps.core.middleware.location.LocationMiddleware',
 ]
 
 ROOT_URLCONF = 'swbmarket.urls'
@@ -85,7 +91,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'swbmarket.wsgi.application'
 
+# settings.py
 
+# Base currency for the platform
+BASE_CURRENCY = 'USD'
+
+# Supported currencies
+SUPPORTED_CURRENCIES = {
+    'USD': {'name': 'US Dollar', 'symbol': '$'},
+    'EUR': {'name': 'Euro', 'symbol': '€'},
+    'GBP': {'name': 'British Pound', 'symbol': '£'},
+    'NGN': {'name': 'Nigerian Naira', 'symbol': '₦'},
+    'GHS': {'name': 'Ghana Cedis', 'symbol': '₵'},
+}
+
+# IP Geolocation API settings
+IP_GEOLOCATION_API_KEY = 'your_api_key'
 
 
 
@@ -191,10 +212,38 @@ SIMPLE_JWT = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
     ),
 }
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+
+# swbmarket/settings.py
+
+REST_FRAMEWORK = {
+    # ... other settings ...
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day',
+        'password_reset': '3/min',
+    }
+}
+
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+
 

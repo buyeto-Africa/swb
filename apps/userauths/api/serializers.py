@@ -6,78 +6,14 @@ from apps.vendor.models import VendorInvitation, VendorProfile
 from django.db import transaction
 from apps.customer.models import CustomerProfile
 
-
-
-
-# apps/userauths/api/serializers.py
-
-# apps/userauths/api/serializers.py
-
-# apps/userauths/api/serializers.py
-
-from rest_framework import serializers
-from django.db import transaction
-from apps.userauths.models import User
 from apps.vendor.models import VendorProfile, VendorInvitation
-
-# apps/userauths/api/serializers.py
-
-
-
-# apps/userauths/api/serializers.py
-
-from rest_framework import serializers
-from django.db import transaction
-from apps.userauths.models import User
-from apps.vendor.models import VendorProfile, VendorInvitation
-
-
-
-
-
-# apps/userauths/api/serializers.py
-
-# apps/userauths/api/serializers.py
-
-# apps/userauths/api/serializers.py
-
-# apps/userauths/api/serializers.py
-
-from rest_framework import serializers
 from django.core.exceptions import ValidationError
-from apps.userauths.models import User
-
-
-# apps/userauths/api/serializers.py
-
-from rest_framework import serializers
-from django.core.exceptions import ValidationError
-from apps.userauths.models import User
-
-# apps/userauths/api/serializers.py
-
-from rest_framework import serializers
-from django.core.exceptions import ValidationError
-from apps.userauths.models import User
 
 
 
 
-# apps/userauths/api/serializers.py
 
-from rest_framework import serializers
-from django.core.exceptions import ValidationError
-from apps.userauths.models import User
 
-# apps/userauths/api/serializers.py
-
-# apps/userauths/api/serializers.py
-
-from rest_framework import serializers
-from django.core.exceptions import ValidationError
-from apps.userauths.models import User
-
-# apps/userauths/api/serializers.py
 
 class CustomerRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -277,56 +213,3 @@ class StaffRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         StaffInvitation.objects.filter(token=invitation_token).update(is_accepted=True)
         return user
-
-
-
-
-
-# apps/userauths/api/serializers.py
-
-# class VendorRegistrationSerializer(serializers.ModelSerializer):
-#     password = serializers.CharField(write_only=True)
-#     invitation_token = serializers.UUIDField(write_only=True)
-#     business_name = serializers.CharField(write_only=True)  # Add this field
-
-#     class Meta:
-#         model = User
-#         fields = ['email', 'phone', 'password', 'invitation_token', 'business_name']
-
-#     def validate(self, data):
-#         try:
-#             invitation = VendorInvitation.objects.get(
-#                 token=data['invitation_token'],
-#                 email=data['email'],
-#                 # is_accepted=False
-#             )
-#             if invitation.is_expired:
-#                 raise serializers.ValidationError({"error": "Invitation has expired"})
-#             return data
-#         except VendorInvitation.DoesNotExist:
-#             raise serializers.ValidationError({"error": "Invalid invitation"})
-
-#     def create(self, validated_data):
-#         # Remove non-model fields
-#         invitation_token = validated_data.pop('invitation_token')
-#         business_name = validated_data.pop('business_name')
-        
-#         # Create user
-#         validated_data['user_type'] = 'vendor'
-#         validated_data['is_email_verified'] = True
-#         user = User.objects.create_user(**validated_data)
-
-#         # Update vendor profile
-#         vendor_profile = user.vendor_profile
-#         vendor_profile.business_name = business_name
-#         vendor_profile.save()
-
-#         # Mark invitation as accepted
-#         VendorInvitation.objects.filter(token=invitation_token).update(is_accepted=True)
-
-#         return user
-    
-
-
-
-
